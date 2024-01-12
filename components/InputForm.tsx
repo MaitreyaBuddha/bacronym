@@ -1,19 +1,16 @@
 import React, { useState, FormEvent } from 'react';
 
-const InputForm = () => {
+interface InputFormProps {
+  onSubmit: (input: string) => void;
+}
+
+const InputForm: React.FC<InputFormProps> = ({ onSubmit }) => {
   const [input, setInput] = useState('');
 
-  const handleSubmit = async (event: FormEvent) => {
+  const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
-    const response = await fetch('/api/submit', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ input }),
-    });
-    const data = await response.json();
-    console.log(data);
+    onSubmit(input);
+    setInput('');
   };
 
   return (
