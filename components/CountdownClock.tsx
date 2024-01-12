@@ -1,15 +1,26 @@
 import React, { useState, useEffect } from 'react';
 
-const CountdownClock = () => {
+interface CountdownClockProps {
+  onTimeUp: () => void;
+}
+
+const CountdownClock: React.FC<CountdownClockProps> = ({ onTimeUp }) => {
   const [countdown, setCountdown] = useState(15);
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCountdown(prevCountdown => prevCountdown > 0 ? prevCountdown - 1 : 0);
+      setCountdown(prevCountdown => {
+        if (prevCountdown > 0) {
+          return prevCountdown - 1;
+        } else {
+          onTimeUp();
+          return 0;
+        }
+      });
     }, 1000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [onTimeUp]);
 
   return (
     <div className="text-4xl font-bold">
@@ -17,5 +28,4 @@ const CountdownClock = () => {
     </div>
   );
 };
-
 export default CountdownClock;
